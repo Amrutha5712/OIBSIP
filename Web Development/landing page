@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      color: #1f2937;
+    }
+    header {
+      background: linear-gradient(to right, #6366f1, #3b82f6);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .section {
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .btn {
+      padding: 12px 30px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .chart {
+      margin: 40px auto;
+      display: block;
+    }
+    footer {
+      background-color: #e5e7eb;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to My Landing Page</h1>
+    <p>Engage your audience with elegant visuals and a clean interface</p>
+    <button class="btn">Get Started</button>
+  </header>
+
+  <div class="section">
+    <h2>Our Growth</h2>
+    <p>Visualize your progress and potential with D3.js</p>
+    <svg class="chart" width="600" height="300"></svg>
+  </div>
+
+  <footer>
+    &copy; 2025 Your Brand. All rights reserved.
+  </footer>
+
+  <script>
+    const data = [10, 25, 35, 50, 65, 80, 95];
+    const svg = d3.select(".chart");
+    const width = +svg.attr("width");
+    const height = +svg.attr("height");
+    const margin = {top: 20, right: 20, bottom: 30, left: 40};
+
+    const x = d3.scaleBand()
+      .domain(data.map((_, i) => i))
+      .range([margin.left, width - margin.right])
+      .padding(0.2);
+
+    const y = d3.scaleLinear()
+      .domain([0, 100])
+      .range([height - margin.bottom, margin.top]);
+
+    svg.selectAll("rect")
+      .data(data)
+      .enter().append("rect")
+      .attr("x", (d, i) => x(i))
+      .attr("y", d => y(d))
+      .attr("width", x.bandwidth())
+      .attr("height", d => y(0) - y(d))
+      .attr("fill", "#3b82f6");
+
+    svg.append("g")
+      .attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickFormat(d => `Q${d + 1}`));
+
+    svg.append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y));
+  </script>
+
+</body>
+</html>
