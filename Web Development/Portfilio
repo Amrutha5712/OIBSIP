@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f4f6;
+      color: #333;
+    }
+    header {
+      background-color: #4f46e5;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .section {
+      padding: 40px 20px;
+    }
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #e5e7eb;
+    }
+    .chart {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hi, I'm Your Name</h1>
+    <p>Web Developer | Designer | Coder</p>
+  </header>
 
+  <div class="section" id="about">
+    <h2>About Me</h2>
+    <p>I am a passionate developer skilled in HTML, CSS, JavaScript, and frameworks like React and D3.js. I love building interactive web applications and data visualizations.</p>
+  </div>
+
+  <div class="section" id="projects">
+    <h2>My Projects</h2>
+    <div class="projects">
+      <div class="project-card">
+        <h3>Project One</h3>
+        <p>A short description of the project goes here.</p>
+      </div>
+      <div class="project-card">
+        <h3>Project Two</h3>
+        <p>A short description of the project goes here.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Skills Chart</h2>
+    <svg class="chart" width="600" height="300"></svg>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Your Name</p>
+  </footer>
+
+  <script>
+    const skills = [
+      { skill: "HTML", value: 90 },
+      { skill: "CSS", value: 85 },
+      { skill: "JavaScript", value: 80 },
+      { skill: "React", value: 75 },
+      { skill: "D3.js", value: 70 },
+    ];
+
+    const svg = d3.select(".chart"),
+          width = +svg.attr("width"),
+          height = +svg.attr("height"),
+          margin = { top: 20, right: 20, bottom: 30, left: 40 };
+
+    const x = d3.scaleBand()
+      .domain(skills.map(d => d.skill))
+      .range([margin.left, width - margin.right])
+      .padding(0.1);
+
+    const y = d3.scaleLinear()
+      .domain([0, 100])
+      .nice()
+      .range([height - margin.bottom, margin.top]);
+
+    svg.append("g")
+      .attr("fill", "#4f46e5")
+      .selectAll("rect")
+      .data(skills)
+      .join("rect")
+        .attr("x", d => x(d.skill))
+        .attr("y", d => y(d.value))
+        .attr("height", d => y(0) - y(d.value))
+        .attr("width", x.bandwidth());
+
+    svg.append("g")
+      .attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x));
+
+    svg.append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y));
+  </script>
+</body>
+</html>
